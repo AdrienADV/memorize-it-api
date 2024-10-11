@@ -50,17 +50,17 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
-      - name: Deploy the new image
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
-          script: |
-            echo ${{ secrets.TOKEN_GITHUB }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-            docker pull ghcr.io/adrienadv/connect-with-me:main
-            docker compose -f cwm-compose.yml up -d
+      # - name: Deploy the new image
+      #   uses: appleboy/ssh-action@master
+      #   with:
+      #     host: ${{ secrets.HOST }}
+      #     username: ${{ secrets.USERNAME }}
+      #     password: ${{ secrets.PASSWORD }}
+      #     script: |
+      # echo ${{ secrets.TOKEN_GITHUB }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      # docker pull ghcr.io/adrienadv/connect-with-me:main
+      # docker compose -f cwm-compose.yml up -d
 
-            # echo docker login ghcr.io -u ${{ github.actor }} --password-stdin
-            # docker pull ghcr.io/adrienadv/connect-with-me:main
-            # docker compose up -d
+      # echo docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      # docker pull ghcr.io/adrienadv/connect-with-me:main
+      # docker compose up -d
