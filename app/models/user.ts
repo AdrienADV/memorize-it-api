@@ -14,7 +14,13 @@ const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
 
 export default class User extends compose(BaseModel, AuthFinder) {
   @column({ isPrimary: true })
-  declare id: number
+  declare id: string
+
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
 
   @column()
   declare fullName: string | null
@@ -22,14 +28,14 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @column()
   declare email: string
 
+  @column()
+  declare stripeCustomerId: string | null
+
+  @column()
+  declare avatarUrl: string | null
+
   @column({ serializeAs: null })
   declare password: string
-
-  @column.dateTime({ autoCreate: true })
-  declare createdAt: DateTime
-
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
-  declare updatedAt: DateTime | null
 
   @manyToMany(() => Deck)
   declare decks: ManyToMany<typeof Deck>

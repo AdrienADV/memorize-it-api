@@ -11,6 +11,8 @@ export default class extends BaseSchema {
       table.integer('category_id').references('id').inTable('categories').onDelete('CASCADE').notNullable()
       table.timestamp('created_at')
       table.timestamp('updated_at')
+      table.string('description').nullable()
+      table.string('price_id').nullable()
       table.boolean('is_public').defaultTo(false)
     })
   }

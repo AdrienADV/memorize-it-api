@@ -17,13 +17,19 @@ export default class Deck extends BaseModel {
   declare title: string
 
   @column()
-  declare userId: number
+  declare ownerId: string
 
   @column()
   declare categoryId: number
 
   @column()
   declare isPublic: boolean
+
+  @column()
+  declare description: string
+
+  @column()
+  declare priceId: string
 
   @hasMany(() => Card)
   declare cards: HasMany<typeof Card>
