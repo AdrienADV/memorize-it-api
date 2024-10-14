@@ -20,7 +20,7 @@ export default class CardsController {
         })
         return response.created({ message: 'Card created successfully', card })
     }
-    async get({ auth, params, request, response }: HttpContext) {
+    async get({ auth, params, response }: HttpContext) {
         assert(auth.user, 'Kindly login')
         const { id } = await GetCardValidator.validate(params)
         console.log(id)
