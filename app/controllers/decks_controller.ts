@@ -4,15 +4,6 @@ import { assert } from '../assert.js'
 import Deck from '#models/deck'
 import User from '#models/user'
 
-// const decksWithCardCount = decks.map(deck => ({
-//     id: deck.id,
-//     name: deck.title,
-//     cardCount: deck.cards.length,
-//     categoryIcon: deck.category.iconName,
-//     categoryFamily: deck.category.iconLibrary,
-// }))
-// return response.ok(decksWithCardCount)
-
 export default class DecksController {
 
     async create({ auth, request, response }: HttpContext) {
@@ -36,12 +27,15 @@ export default class DecksController {
             query.preload('cards')
         }).first()
 
-        const decks = decksUser?.decks.map(deck => ({
+        if (!decksUser) {
+            return response.ok([])
+        }
+        const decks = decksUser.decks.map(deck => ({
             id: deck.id,
             name: deck.title,
             cardCount: deck.cards.length,
-            categoryIcon: deck.category.iconName,
-            categoryFamily: deck.category.iconLibrary,
+            iconCategoryName: deck.category.iconName,
+            iconCategoryFamily: deck.category.iconLibrary,
             isEditable: deck.ownerId === auth.user?.id,
         }))
         return response.ok(decks)

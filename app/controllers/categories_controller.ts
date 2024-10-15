@@ -5,7 +5,6 @@ export default class CategoriesController {
 
     public async all({ response }: HttpContext) {
         const categories = await Category.all();
-        console.log(categories);
         return response.ok(categories);
     }
 }

@@ -8,10 +8,10 @@ export default class FakesController {
     public async index({ response }: HttpContext) {
         await Category.createMany([
             { name: 'Anglais', iconName: 'language', iconLibrary: 'AntDesign', id: 1 },
-            { name: 'Mathématiques', iconLibrary: 'calculator', iconName: 'AntDesign', id: 2 },
-            { name: 'Histoire', iconLibrary: 'history', iconName: 'AntDesign', id: 3 },
-            { name: 'Géographie', iconLibrary: 'earth', iconName: 'AntDesign', id: 4 },
-            { name: 'Physique', iconLibrary: 'experiment', iconName: 'AntDesign', id: 5 },
+            { name: 'Mathématiques', iconLibrary: 'AntDesign' , iconName: 'calculator', id: 2 },
+            { name: 'Histoire', iconLibrary: 'AntDesign', iconName: 'history', id: 3 },
+            { name: 'Géographie', iconLibrary: 'AntDesign', iconName: 'earth', id: 4 },
+            { name: 'Physique', iconLibrary: 'AntDesign' , iconName: 'experiment', id: 5 },
         ])
         const user = await User.createMany([{
             email: `user_prof@example.com`,
