@@ -21,14 +21,19 @@ export default class DecksController {
 
     async get({ auth, response }: HttpContext) {
         assert(auth.user, 'Kindly login')
-        const getDecks = await Deck.query().preload('cards').where('ownerId', auth.user.id)
-        const decksWithCardCount = getDecks.map(deck => {
-            return {
-                id: deck.id,
-                name: deck.title,
-                cardCount: deck.cards.length
-            }
-        })
+        const decks = await Deck.query()
+            .preload('cards')
+            .preload('category')
+            .where('ownerId', auth.user.id)
+
+        const decksWithCardCount = decks.map(deck => ({
+            id: deck.id,
+            name: deck.title,
+            cardCount: deck.cards.length,
+            categoryIcon: deck.category.iconName,
+            categoryFamily: deck.category.iconLibrary,
+        }))
+
         return response.ok(decksWithCardCount)
     }
 }

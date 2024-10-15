@@ -7,11 +7,11 @@ import type { HttpContext } from '@adonisjs/core/http'
 export default class FakesController {
     public async index({ response }: HttpContext) {
         await Category.createMany([
-            { name: 'Anglais', iconName: 'language', iconLibrary: 'AntDesign' },
-            { name: 'Mathématiques', iconLibrary: 'calculator', iconName: 'AntDesign' },
-            { name: 'Histoire', iconLibrary: 'history', iconName: 'AntDesign' },
-            { name: 'Géographie', iconLibrary: 'earth', iconName: 'AntDesign' },
-            { name: 'Physique', iconLibrary: 'experiment', iconName: 'AntDesign' },
+            { name: 'Anglais', iconName: 'language', iconLibrary: 'AntDesign', id: 1 },
+            { name: 'Mathématiques', iconLibrary: 'calculator', iconName: 'AntDesign', id: 2 },
+            { name: 'Histoire', iconLibrary: 'history', iconName: 'AntDesign', id: 3 },
+            { name: 'Géographie', iconLibrary: 'earth', iconName: 'AntDesign', id: 4 },
+            { name: 'Physique', iconLibrary: 'experiment', iconName: 'AntDesign', id: 5 },
         ])
         const user = await User.createMany([{
             email: `user_prof@example.com`,
