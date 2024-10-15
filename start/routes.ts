@@ -4,6 +4,7 @@ import AuthController from '#controllers/auth_controller'
 import { middleware } from './kernel.js'
 import DecksController from '#controllers/decks_controller'
 import CardsController from '#controllers/cards_controller'
+import CategoriesController from '#controllers/categories_controller'
 
 router.get('/', async () => {
   return {
@@ -14,10 +15,10 @@ router.get('/', async () => {
 router.group(() => {
   router.post('/auth/login', [AuthController, 'login'])
   router.post('/auth/register', [AuthController, 'register'])
-
 })
 
 router.group(() => {
+  router.get('/categories', [CategoriesController, 'all'])
 
   router.group(() => {
     router.post('/', [DecksController, 'create'])

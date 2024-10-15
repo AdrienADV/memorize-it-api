@@ -37,7 +37,13 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @column({ serializeAs: null })
   declare password: string
 
-  @manyToMany(() => Deck)
+  @manyToMany(() => Deck, {
+    pivotTable: 'deck_users',
+    localKey: 'id',
+    pivotForeignKey: 'user_id',
+    relatedKey: 'id',
+    pivotRelatedForeignKey: 'deck_id',
+  })
   declare decks: ManyToMany<typeof Deck>
 
   static accessTokens = DbAccessTokensProvider.forModel(User, {

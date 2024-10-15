@@ -26,18 +26,18 @@ export default class FakesController {
             fullName: "Adrien",
             password: "123456",
         }])
-
-        const prof = await user[0].id
+        const profProfile = await user[0]
         const quentin = await user[1].id
         const adrien = await user[2].id
 
         const createProfDeck = await Deck.create({
             title: "Vocabulaire d'anglais",
-            ownerId: prof,
+            ownerId: profProfile.id,
             categoryId: 1,
             isPublic: true,
             description: "Un deck pour apprendre l'anglais",
         })
+        await profProfile.related('decks').attach([createProfDeck.id])
         const createManyCard = await Card.createMany([{
             deckId: createProfDeck.id,
             answer: 'Hello',

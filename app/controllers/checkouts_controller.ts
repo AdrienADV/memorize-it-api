@@ -23,6 +23,7 @@ export default class CheckoutsController {
     }
 
     public async webhook({ request, response }: HttpContext) {
+        console.log('webhook');
         const RequestRaw = request.raw();
         const signature = request.header('stripe-signature')
         assert(signature, 'Stripe signature is required');

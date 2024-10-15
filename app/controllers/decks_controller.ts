@@ -2,6 +2,16 @@ import { CreateDeckValidator } from '#validators/deck'
 import type { HttpContext } from '@adonisjs/core/http'
 import { assert } from '../assert.js'
 import Deck from '#models/deck'
+import User from '#models/user'
+
+// const decksWithCardCount = decks.map(deck => ({
+//     id: deck.id,
+//     name: deck.title,
+//     cardCount: deck.cards.length,
+//     categoryIcon: deck.category.iconName,
+//     categoryFamily: deck.category.iconLibrary,
+// }))
+// return response.ok(decksWithCardCount)
 
 export default class DecksController {
 
@@ -21,19 +31,24 @@ export default class DecksController {
 
     async get({ auth, response }: HttpContext) {
         assert(auth.user, 'Kindly login')
-        const decks = await Deck.query()
-            .preload('cards')
-            .preload('category')
-            .where('ownerId', auth.user.id)
+        const decksUser = await User.query().where('id', auth.user.id).preload('decks', (query) => {
+            query.preload('category')
+            query.preload('cards')
+        }).first()
 
-        const decksWithCardCount = decks.map(deck => ({
+        const decks = decksUser?.decks.map(deck => ({
             id: deck.id,
             name: deck.title,
             cardCount: deck.cards.length,
             categoryIcon: deck.category.iconName,
             categoryFamily: deck.category.iconLibrary,
+            isEditable: deck.ownerId === auth.user?.id,
         }))
+        return response.ok(decks)
+    }
 
-        return response.ok(decksWithCardCount)
+    async addDeckToUser({ auth, request, response }: HttpContext) {
+        assert(auth.user, 'Kindly login')
+        return response.created({ message: 'Deck added to user' })
     }
 }
