@@ -17,6 +17,7 @@ export default class DecksController {
             description,
             priceId,
         })
+        await auth.user.related('decks').attach([deck.id])
         return response.created(deck)
     }
 
