@@ -27,10 +27,7 @@ export default class DecksController {
             query.preload('cards')
         }).first()
 
-        if (!decksUser) {
-            return response.ok([])
-        }
-        const decks = decksUser.decks.map(deck => ({
+        const decks = decksUser?.decks.map(deck => ({
             id: deck.id,
             name: deck.title,
             cardCount: deck.cards.length,
