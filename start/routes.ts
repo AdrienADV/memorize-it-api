@@ -5,6 +5,7 @@ import { middleware } from './kernel.js'
 import DecksController from '#controllers/decks_controller'
 import CardsController from '#controllers/cards_controller'
 import CategoriesController from '#controllers/categories_controller'
+import ExplorersController from '#controllers/explorers_controller'
 
 router.get('/', async () => {
   return {
@@ -30,8 +31,12 @@ router.group(() => {
     router.get('/:id', [CardsController, 'get'])
   }).prefix('/cards')
 
-  router.post('/auth/logout', [AuthController, 'logout'])
+  router.group(() => {
+    router.get('/all', [ExplorersController, 'allPublicDecks'])
+    
+  }).prefix('/explorer')
 
+  router.post('/auth/logout', [AuthController, 'logout'])
 }).use(middleware.auth())
 
 router.get('/fakes', [FakesController, 'index'])

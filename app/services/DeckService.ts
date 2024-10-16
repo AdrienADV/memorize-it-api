@@ -13,5 +13,4 @@ class DeckService {
         return deck as Deck
     }
 }
-
 export default new DeckService()
