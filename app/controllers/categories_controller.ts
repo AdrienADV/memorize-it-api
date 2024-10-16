@@ -4,7 +4,11 @@ import Category from '#models/category';
 export default class CategoriesController {
 
     public async all({ response }: HttpContext) {
-        const categories = await Category.all();
-        return response.ok(categories);
+        const categories = await Category.query().select('id', 'name')
+        const formatCategory = categories.map(category => ({
+            id: category.id,
+            label: category.name
+        }))
+        return response.ok(formatCategory);
     }
 }
