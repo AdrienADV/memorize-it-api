@@ -8,14 +8,14 @@ export default class DecksController {
 
     async create({ auth, request, response }: HttpContext) {
         assert(auth.user, 'Kindly login')
-        const { title, categoryId, isPublic, description, priceId } = await request.validateUsing(CreateDeckValidator)
+        const { title, categoryId } = await request.validateUsing(CreateDeckValidator)
         const deck = await Deck.create({
             title,
             categoryId,
             ownerId: auth.user.id,
-            isPublic,
-            description,
-            priceId,
+            // isPublic,
+            // description,
+            // priceId,
         })
         await auth.user.related('decks').attach([deck.id])
         return response.created(deck)
