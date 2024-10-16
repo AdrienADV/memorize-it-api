@@ -6,7 +6,7 @@ export default class CategoriesController {
     public async all({ response }: HttpContext) {
         const categories = await Category.query().select('id', 'name')
         const formatCategory = categories.map(category => ({
-            id: category.id,
+            value: category.id,
             label: category.name
         }))
         return response.ok(formatCategory);
