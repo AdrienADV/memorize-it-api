@@ -1,12 +1,13 @@
-import Card from '#models/card'
-import DeckService from '#services/DeckService'
-import { idUuidValidator } from '#validators/card'
 import type { HttpContext } from '@adonisjs/core/http'
+import { idUuidValidator } from '#validators/card'
 import { assert } from '../assert.js'
 import { swipeValidator } from '#validators/game'
 
-export default class GamesController {
+import Card from '#models/card'
+import DeckService from '#services/DeckService'
 
+export default class GamesController {
+    
     public async getRandomCard({ auth, params, response }: HttpContext) {
         assert(auth.user, 'Kindly login')
         const { id: deckId } = await idUuidValidator.validate(params)
