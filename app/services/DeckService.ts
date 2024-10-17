@@ -1,4 +1,5 @@
 import Deck from '#models/deck'
+import User from '#models/user'
 
 class DeckService {
     /**
@@ -11,6 +12,11 @@ class DeckService {
     public async verifyOwnership(deckId: string, userId: string) {
         const deck = await Deck.query().where('id', deckId).andWhere('ownerId', userId).first()
         return deck as Deck
+    }
+    public async isDeckinMyLibrary(deckId: string, userId: string) {
+        const user = await User.query().where('id', userId).preload('decks').first()
+        const isDeckMine = user?.decks.find(deck => deck.id === deckId)
+        return isDeckMine as Deck || null
     }
 }
 export default new DeckService()

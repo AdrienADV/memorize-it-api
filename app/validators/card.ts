@@ -8,8 +8,10 @@ export const CreateCardValidator = vine.compile(
     })
 )
 
-export const GetCardValidator = vine.compile(
+export const idUuidValidator = vine.compile(
     vine.object({
         id: vine.string().uuid(),
     })
 )
+
+// GetCardValidator

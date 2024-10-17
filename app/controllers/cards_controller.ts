@@ -1,6 +1,6 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import { assert } from '../assert.js'
-import { CreateCardValidator, GetCardValidator } from '#validators/card'
+import { CreateCardValidator, idUuidValidator } from '#validators/card'
 import Card from '#models/card'
 import DeckService from '#services/DeckService'
 
@@ -23,7 +23,7 @@ export default class CardsController {
 
     async get({ auth, params, response }: HttpContext) {
         assert(auth.user, 'Kindly login')
-        const { id } = await GetCardValidator.validate(params)
+        const { id } = await idUuidValidator.validate(params)
         const isDeckMine = await DeckService.verifyOwnership(id, auth.user.id)
         if (!isDeckMine) {
             return response.forbidden({ error: 'You are not allowed to create a card in this deck' })

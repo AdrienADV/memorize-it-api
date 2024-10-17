@@ -6,6 +6,7 @@ import DecksController from '#controllers/decks_controller'
 import CardsController from '#controllers/cards_controller'
 import CategoriesController from '#controllers/categories_controller'
 import ExplorersController from '#controllers/explorers_controller'
+import GamesController from '#controllers/games_controller'
 
 router.get('/', async () => {
   return {
@@ -33,8 +34,13 @@ router.group(() => {
 
   router.group(() => {
     router.get('/all', [ExplorersController, 'allPublicDecks'])
-    
+
   }).prefix('/explorer')
+
+  router.group(() => {
+    router.get('/random/:id', [GamesController, 'getRandomCard'])
+    router.post('/swipe', [GamesController, 'swipe'])
+  }).prefix('/game')
 
   router.post('/auth/logout', [AuthController, 'logout'])
 }).use(middleware.auth())
