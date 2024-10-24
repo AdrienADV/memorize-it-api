@@ -1,12 +1,17 @@
 import router from '@adonisjs/core/services/router'
-import FakesController from '#controllers/fakes_controller'
-import AuthController from '#controllers/auth_controller'
+
+import AutoSwagger from "adonis-autoswagger";
+import swagger from "#config/swagger";
+
 import { middleware } from './kernel.js'
-import DecksController from '#controllers/decks_controller'
-import CardsController from '#controllers/cards_controller'
-import CategoriesController from '#controllers/categories_controller'
-import ExplorersController from '#controllers/explorers_controller'
-import GamesController from '#controllers/games_controller'
+
+const FakesController = () => import('#controllers/fakes_controller')
+const AuthController = () => import('#controllers/auth_controller')
+const DecksController = () => import('#controllers/decks_controller')
+const CardsController = () => import('#controllers/cards_controller')
+const CategoriesController = () => import('#controllers/categories_controller')
+const ExplorersController = () => import('#controllers/explorers_controller')
+const GamesController = () => import('#controllers/games_controller')
 
 router.get('/', async () => {
   return {
@@ -46,6 +51,15 @@ router.group(() => {
 }).use(middleware.auth())
 
 router.get('/fakes', [FakesController, 'index'])
+
+
+router.get("/swagger", async () => {
+  return AutoSwagger.default.docs(router.toJSON(), swagger);
+});
+
+router.get("/docs", async () => {
+  return AutoSwagger.default.ui("/swagger", swagger);
+});
 
 router.get('*', async () => {
   return {
