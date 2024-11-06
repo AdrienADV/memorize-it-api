@@ -52,15 +52,6 @@ router.group(() => {
 
 router.get('/fakes', [FakesController, 'index'])
 
-
-router.get("/swagger", async () => {
-  return AutoSwagger.default.docs(router.toJSON(), swagger);
-});
-
-router.get("/docs", async () => {
-  return AutoSwagger.default.ui("/swagger", swagger);
-});
-
 router.get('*', async () => {
   return {
     message: 'Not found',
