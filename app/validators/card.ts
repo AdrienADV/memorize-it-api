@@ -2,8 +2,8 @@ import vine from '@vinejs/vine'
 
 export const CreateCardValidator = vine.compile(
     vine.object({
-        question: vine.string().minLength(3),
-        answer: vine.string().minLength(3),
+        question: vine.string().minLength(1).maxLength(255),
+        answer: vine.string().minLength(1).maxLength(255),
         deckId: vine.string().uuid(),
     })
 )
@@ -13,5 +13,3 @@ export const idUuidValidator = vine.compile(
         id: vine.string().uuid(),
     })
 )
-
-// GetCardValidator
