@@ -47,7 +47,6 @@ router.group(() => {
 
 router.get('/fakes', [FakesController, 'index'])
 
-
 router.get('*', async () => {
   return {
     message: 'Not found',

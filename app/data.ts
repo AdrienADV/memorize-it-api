@@ -2,8 +2,8 @@ export const categories = [
     {
         id: 1,
         name: "Histoire",
-        iconName: "history",
-        iconLibrary: "MaterialIcons"
+        iconName: "scroll",
+        iconLibrary: "FontAwesome5"
     },
     {
         id: 2,
@@ -21,13 +21,13 @@ export const categories = [
         id: 4,
         name: "Langues",
         iconName: "language",
-        iconLibrary: "MaterialIcons"
+        iconLibrary: "Entypo"
     },
     {
         id: 5,
         name: "Géographie",
         iconName: "globe",
-        iconLibrary: "FontAwesome"
+        iconLibrary: "Entypo"
     },
     {
         id: 6,
@@ -39,7 +39,7 @@ export const categories = [
         id: 7,
         name: "Musique",
         iconName: "music-note",
-        iconLibrary: "MaterialIcons"
+        iconLibrary: "Fontisto"
     },
     {
         id: 8,
@@ -50,26 +50,26 @@ export const categories = [
     {
         id: 9,
         name: "Cuisine",
-        iconName: "food",
-        iconLibrary: "MaterialCommunityIcons"
+        iconName: "fast-food",
+        iconLibrary: "Ionicons"
     },
     {
         id: 10,
         name: "Littérature",
-        iconName: "book-open",
-        iconLibrary: "Feather"
+        iconName: "book",
+        iconLibrary: "Entypo"
     },
     {
         id: 11,
         name: "Art",
         iconName: "palette",
-        iconLibrary: "MaterialCommunityIcons"
+        iconLibrary: "FontAwesome5"
     },
     {
         id: 12,
         name: "Voyage",
         iconName: "airplane",
-        iconLibrary: "FontAwesome"
+        iconLibrary: "Ionicons"
     },
     {
         id: 13,
