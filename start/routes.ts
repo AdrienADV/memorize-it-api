@@ -1,13 +1,13 @@
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
 
-const FakesController = () => import('#controllers/fakes_controller')
-const AuthController = () => import('#controllers/auth_controller')
-const DecksController = () => import('#controllers/decks_controller')
-const CardsController = () => import('#controllers/cards_controller')
-const CategoriesController = () => import('#controllers/categories_controller')
-const ExplorersController = () => import('#controllers/explorers_controller')
-const GamesController = () => import('#controllers/games_controller')
+import FakesController from '#controllers/fakes_controller'
+import AuthController from '#controllers/auth_controller'
+import DecksController from '#controllers/decks_controller'
+import CardsController from '#controllers/cards_controller'
+import CategoriesController from '#controllers/categories_controller'
+import ExplorersController from '#controllers/explorers_controller'
+import GamesController from '#controllers/games_controller'
 
 router.get('/', async () => {
   return {
@@ -45,11 +45,7 @@ router.group(() => {
   router.post('/auth/logout', [AuthController, 'logout'])
 }).use(middleware.auth())
 
-router.group(() => {
-  router.get('/', [FakesController, 'index'])
-  router.get('/add-favorite', [CategoriesController, 'addCategories'])
-  router.get('/add-decks', [DecksController, 'addDecks'])
-}).prefix('/fakes')
+router.get('/fakes', [FakesController, 'index'])
 
 
 router.get('*', async () => {

@@ -570,6 +570,7 @@ export const publicDecks = [
     {
         title: 'Les Courants Artistiques',
         categoryId: 11,
+        isPublic: true,
         description: "Explorez les différents mouvements artistiques et leurs œuvres célèbres.",
         priceId: 'price_1JZ9ZwGK5Q7Zz9Q9Q9ZwGK5Q',
         cards: [
