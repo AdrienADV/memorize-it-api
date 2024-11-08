@@ -13,7 +13,7 @@ class DeckService {
         const deck = await Deck.query().where('id', deckId).andWhere('ownerId', userId).first()
         return deck as Deck
     }
-    public async isDeckinMyLibrary(deckId: string, userId: string) {
+    public async isDeckInMyLibrary(deckId: string, userId: string) {
         const user = await User.query().where('id', userId).preload('decks').first()
         const isDeckMine = user?.decks.find(deck => deck.id === deckId)
         return isDeckMine as Deck || null

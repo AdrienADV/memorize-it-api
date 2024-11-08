@@ -11,7 +11,7 @@ export default class GamesController {
     public async getRandomCard({ auth, params, response }: HttpContext) {
         assert(auth.user, 'Kindly login')
         const { id: deckId } = await idUuidValidator.validate(params)
-        const isDeckinMyLibrary = await DeckService.isDeckinMyLibrary(deckId, auth.user.id)
+        const isDeckinMyLibrary = await DeckService.isDeckInMyLibrary(deckId, auth.user.id)
         if (!isDeckinMyLibrary) {
             return response.forbidden({ error: 'Vous n\'êtes pas autorisé à jouer avec ce deck' })
         }
