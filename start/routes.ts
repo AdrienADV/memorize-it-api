@@ -1,8 +1,4 @@
 import router from '@adonisjs/core/services/router'
-
-import AutoSwagger from "adonis-autoswagger";
-import swagger from "#config/swagger";
-
 import { middleware } from './kernel.js'
 
 const FakesController = () => import('#controllers/fakes_controller')
@@ -38,8 +34,7 @@ router.group(() => {
   }).prefix('/cards')
 
   router.group(() => {
-    router.get('/all', [ExplorersController, 'allPublicDecks'])
-
+    router.get('/all/:categoryId?', [ExplorersController, 'all'])
   }).prefix('/explorer')
 
   router.group(() => {
@@ -50,7 +45,12 @@ router.group(() => {
   router.post('/auth/logout', [AuthController, 'logout'])
 }).use(middleware.auth())
 
-router.get('/fakes', [FakesController, 'index'])
+router.group(() => {
+  router.get('/', [FakesController, 'index'])
+  router.get('/add-favorite', [CategoriesController, 'addCategories'])
+  router.get('/add-decks', [DecksController, 'addDecks'])
+}).prefix('/fakes')
+
 
 router.get('*', async () => {
   return {

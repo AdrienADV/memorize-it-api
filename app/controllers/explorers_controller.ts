@@ -3,16 +3,26 @@ import type { HttpContext } from '@adonisjs/core/http'
 
 export default class ExplorersController {
 
-    public async allPublicDecks({ response }: HttpContext) {
-        const allPublicDeck = await Deck.query().where('isPublic', true).select('id', 'title', 'priceId', 'categoryId').preload('category').preload('cards')
-        const formatDecks = allPublicDeck.map(deck => ({
-            id: deck.id,
-            title: deck.title,
-            numberOfCards: deck.cards.length,
-            priceId: deck.priceId,
-            category: deck.category.name
-        }))
-        return response.ok(formatDecks);
-    }
+    async all({ params, response }: HttpContext) {
+        const { categoryId } = params;
+        const query = Deck.query()
+            .where('isPublic', true)
+            .preload('category')
+            .preload('cards');
+        if (categoryId) {
+            query.where('categoryId', categoryId);
+        }
+        const decks = await query;
 
+        const decksWithOwner = decks.map(deck => ({
+            id: deck.id,
+            name: deck.title,
+            cardCount: deck.cards.length,
+            categoryId: deck.categoryId,
+            iconCategoryName: deck.category.iconName,
+            iconCategoryFamily: deck.category.iconLibrary,
+        }));
+
+        return response.ok(decksWithOwner);
+    }
 }

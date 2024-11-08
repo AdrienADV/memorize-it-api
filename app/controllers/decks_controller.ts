@@ -3,6 +3,8 @@ import type { HttpContext } from '@adonisjs/core/http'
 import { assert } from '../assert.js'
 import Deck from '#models/deck'
 import User from '#models/user'
+import { publicDecks } from '../data.js'
+import Card from '#models/card'
 
 export default class DecksController {
 
@@ -13,9 +15,6 @@ export default class DecksController {
             title,
             categoryId,
             ownerId: auth.user.id,
-            // isPublic,
-            // description,
-            // priceId,
         })
         await auth.user.related('decks').attach([deck.id])
         return response.created(deck)
@@ -42,5 +41,28 @@ export default class DecksController {
     async addDeckToUser({ auth, request, response }: HttpContext) {
         assert(auth.user, 'Kindly login')
         return response.created({ message: 'Deck added to user' })
+    }
+
+
+    async addDecks({ response }: HttpContext) {
+        const newUserAdmin = await User.create({
+            email: 'admin@gmail.com',
+            password: '123456',
+        });
+        const decksWithOwner = publicDecks.map((deck) => ({
+            ...deck,
+            ownerId: newUserAdmin.id,
+        }));
+        const decks = await Deck.createMany(decksWithOwner);
+        const cardsToCreate = decks.flatMap((deck, index) => {
+            const deckCards = publicDecks[index].cards;
+            return deckCards.map((card) => ({
+                ...card,
+                deckId: deck.id,
+            }));
+        });
+        await Card.createMany(cardsToCreate);
+
+        return response.ok({ decks, message: "Decks and cards created successfully" });
     }
 }

@@ -5,19 +5,6 @@ import User from '#models/user'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class FakesController {
-    /**
-     * @summary Create fake data for categories, users, decks, and cards
-     * @tag Fake Data
-     * @description This endpoint generates several categories, users, and a sample deck with related cards for testing purposes.
-     * @operationId createFakeData
-     * 
-     * @responseBody 200 - {"createProfDeck": "Deck", "createManyCard": "Card[]"} - Successfully created fake data
-     * @responseBody 400 - {"error": "Bad Request"} - Invalid data provided
-     * @responseBody 500 - {"error": "Internal Server Error"} - Server error occurred
-     * 
-     * @paramType query
-     * @requestBody 200 - {"categories": "Category[]", "users": "User[]", "deck": "Deck", "cards": "Card[]"}
-     */
     public async index({ response }: HttpContext) {
         await Category.createMany([
             { name: 'Anglais', iconName: 'language', iconLibrary: 'AntDesign', id: 1 },
@@ -40,8 +27,6 @@ export default class FakesController {
             password: "123456",
         }])
         const profProfile = await user[0]
-        const quentin = await user[1].id
-        const adrien = await user[2].id
 
         const createProfDeck = await Deck.create({
             title: "Vocabulaire d'anglais",
