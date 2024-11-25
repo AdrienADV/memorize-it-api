@@ -8,6 +8,7 @@ import CardsController from '#controllers/cards_controller'
 import CategoriesController from '#controllers/categories_controller'
 import ExplorersController from '#controllers/explorers_controller'
 import GamesController from '#controllers/games_controller'
+import CheckoutsController from '#controllers/checkouts_controller'
 
 router.get('/', async () => {
   return {
@@ -36,6 +37,7 @@ router.group(() => {
   router.group(() => {
     router.get('/all/:categoryId?', [ExplorersController, 'all'])
     router.get('/decks/:id', [ExplorersController, 'decksDetails'])
+    router.post('/checkout', [CheckoutsController, 'checkout'])
   }).prefix('/explorer')
 
   router.group(() => {
@@ -43,10 +45,13 @@ router.group(() => {
     router.post('/swipe', [GamesController, 'swipe'])
   }).prefix('/game')
 
+
   router.post('/auth/logout', [AuthController, 'logout'])
 }).use(middleware.auth())
 
 router.get('/fakes', [FakesController, 'index'])
+
+router.post('/webhook', [CheckoutsController, 'webhook'])
 
 router.get('*', async () => {
   return {

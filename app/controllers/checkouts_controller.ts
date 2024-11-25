@@ -3,23 +3,48 @@ import env from '#start/env'
 import User from '#models/user';
 import Stripe from 'stripe';
 import { assert } from '../assert.js';
+import { checkoutValidator } from '#validators/checkout';
+import Deck from '#models/deck';
 
 export const stripe = new Stripe(env.get('STRIPE_SECRET_KEY'))
 
 export default class CheckoutsController {
-
     public async checkout({ auth, request, response }: HttpContext) {
         assert(auth.user, 'kindly login');
-        const body = request.body();
-        const stripeCustomerId = await this.getOrCreateStripeCustomerId(auth.user);
-        const session = await stripe.checkout.sessions.create({
-        });
+        const { deckId } = await request.validateUsing(checkoutValidator);
 
-        if (!session.url) {
-            return response.badRequest({ message: 'Session URL not found' });
+        const deck = await Deck.query().where('id', deckId).first();
+
+        if (!deck) {
+            return response.notFound({ message: 'Le deck n\'existe pas' });
         }
 
-        return response.ok({ url: session.url });
+        const customerId = await this.getOrCreateStripeCustomerId(auth.user);
+
+        const ephemeralKey = await stripe.ephemeralKeys.create(
+            { customer: customerId },
+            { apiVersion: '2024-09-30.acacia' }
+        );
+
+        const paymentIntent = await stripe.paymentIntents.create({
+            amount: Number(deck.priceId) * 100,
+            currency: 'eur',
+            customer: customerId,
+            automatic_payment_methods: {
+                enabled: true,
+            },
+            metadata: {
+                deckId: deck.id,
+                userId: auth.user.id,
+            }
+        });
+
+        return response.ok({
+            paymentIntent: paymentIntent.client_secret,
+            ephemeralKey: ephemeralKey.secret,
+            customer: customerId,
+            publishableKey: env.get('STRIPE_PUBLIC_KEY'),
+        });
     }
 
     public async webhook({ request, response }: HttpContext) {
@@ -41,19 +66,38 @@ export default class CheckoutsController {
             return response.badRequest({ message: 'Webhook Error', error: err });
         }
 
+
         switch (event.type) {
-            case 'checkout.session.completed':
-                const metadata = event.data.object.metadata;
-                try {
-                    console.log('checkout.session.completed', metadata);
-                } catch (error) {
+            case 'payment_intent.succeeded': {
+                const paymentIntent = event.data.object as Stripe.PaymentIntent;
+                const userId = paymentIntent.metadata.userId;
+                const deckId = paymentIntent.metadata.deckId;
+
+                console.log('Paiement réussi :', paymentIntent)
+                console.log('User ID :', userId)
+                console.log('Deck ID :', deckId)
+
+                const user = await User.query().where('id', userId).first();
+                const deck = await Deck.query().where('id', deckId).first();
+
+                if (!user || !deck) {
+                    return response.notFound({ message: 'User or deck not found' });
                 }
+                await user.related('decks').attach([deck.id]);
+                console.log('Paiement réussi :', paymentIntent);
                 break;
-            case 'checkout.session.async_payment_succeeded':
+            }
+            case 'payment_intent.payment_failed': {
+                const paymentIntent = event.data.object as Stripe.PaymentIntent;
+                console.log('Paiement échoué :', paymentIntent);
                 break;
+            }
             default:
-                return
+                console.log(`Unhandled event type ${event.type}`);
         }
+
+        return response.ok({ received: true });
+
     }
 
     public async getOrCreateStripeCustomerId(user: User) {
@@ -67,4 +111,5 @@ export default class CheckoutsController {
         await User.query().where('id', user.id).update({ stripeCustomerId: stripeCustomer.id });
         return stripeCustomer.id;
     }
+
 }
