@@ -45,7 +45,7 @@ export default class ExplorersController {
             id: deck.id,
             name: deck.title,
             cardCount: deck.cards.length,
-            categoryId: deck.categoryId,
+            category: deck.category,
             iconCategoryName: deck.category.iconName,
             iconCategoryFamily: deck.category.iconLibrary,
             cards: deck.cards.map(card => ({
