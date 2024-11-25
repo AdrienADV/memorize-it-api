@@ -35,6 +35,7 @@ router.group(() => {
 
   router.group(() => {
     router.get('/all/:categoryId?', [ExplorersController, 'all'])
+    router.get('/decks/:id', [ExplorersController, 'decksDetails'])
   }).prefix('/explorer')
 
   router.group(() => {

@@ -9,3 +9,9 @@ export const CreateDeckValidator = vine.compile(
         // priceId: vine.string().minLength(3),
     })
 )
+
+export const getDeckPublicDeckValidator = vine.compile(
+    vine.object({
+        id: vine.string().trim().uuid(),
+    })
+)
