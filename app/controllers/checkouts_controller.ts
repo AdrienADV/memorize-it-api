@@ -47,6 +47,10 @@ export default class CheckoutsController {
         });
     }
 
+    async stripeKey({ response }: HttpContext) {
+        return response.ok({ key: env.get('STRIPE_PUBLIC_KEY') });
+    }
+
     public async webhook({ request, response }: HttpContext) {
         console.log('webhook');
         const RequestRaw = request.raw();
