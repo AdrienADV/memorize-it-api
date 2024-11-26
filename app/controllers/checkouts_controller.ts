@@ -55,6 +55,10 @@ export default class CheckoutsController {
         console.log('webhook');
         const RequestRaw = request.raw();
         const signature = request.header('stripe-signature')
+
+        console.log('RequestRaw :', RequestRaw);
+        console.log('signature :', signature);
+
         assert(signature, 'Stripe signature is required');
         assert(RequestRaw, 'Request body is required');
 
@@ -66,7 +70,7 @@ export default class CheckoutsController {
                 env.get('STRIPE_WEBHOOK_SECRET')
             );
         } catch (err) {
-            console.log(err);
+            // console.log(err);
             return response.badRequest({ message: 'Webhook Error', error: err });
         }
 
