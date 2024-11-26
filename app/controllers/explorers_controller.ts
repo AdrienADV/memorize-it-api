@@ -20,6 +20,7 @@ export default class ExplorersController {
             name: deck.title,
             cardCount: deck.cards.length,
             categoryId: deck.categoryId,
+            price: deck.priceId,
             iconCategoryName: deck.category.iconName,
             iconCategoryFamily: deck.category.iconLibrary,
         }));
@@ -46,6 +47,7 @@ export default class ExplorersController {
             name: deck.title,
             cardCount: deck.cards.length,
             category: deck.category,
+            price: deck.priceId,
             iconCategoryName: deck.category.iconName,
             iconCategoryFamily: deck.category.iconLibrary,
             cards: deck.cards.map(card => ({
