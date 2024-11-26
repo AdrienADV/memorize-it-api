@@ -47,12 +47,14 @@ router.group(() => {
 
 
   router.post('/auth/logout', [AuthController, 'logout'])
+
+  router.get('/stripe-key', [CheckoutsController, 'stripeKey'])
 }).use(middleware.auth())
 
 router.get('/fakes', [FakesController, 'index'])
 
 router.post('/webhook', [CheckoutsController, 'webhook'])
-router.get('/stripe-key', [CheckoutsController, 'stripeKey'])
+
 router.get('*', async () => {
   return {
     message: 'Not found',
