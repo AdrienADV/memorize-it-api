@@ -47,6 +47,7 @@ export default class ExplorersController {
             name: deck.title,
             cardCount: deck.cards.length,
             category: deck.category,
+            description: deck.description,
             price: deck.priceId,
             iconCategoryName: deck.category.iconName,
             iconCategoryFamily: deck.category.iconLibrary,
