@@ -85,14 +85,14 @@ export default class CheckoutsController {
                 console.log('User ID :', userId)
                 console.log('Deck ID :', deckId)
 
-                const user = await User.query().where('id', userId).first();
-                const deck = await Deck.query().where('id', deckId).first();
+                // const user = await User.query().where('id', userId).first();
+                // const deck = await Deck.query().where('id', deckId).first();
 
-                if (!user || !deck) {
-                    return response.notFound({ message: 'User or deck not found' });
-                }
-                await user.related('decks').attach([deck.id]);
-                console.log('Paiement réussi :', paymentIntent);
+                // if (!user || !deck) {
+                //     return response.notFound({ message: 'User or deck not found' });
+                // }
+                // await user.related('decks').attach([deck.id]);
+                // console.log('Paiement réussi :', paymentIntent);
                 break;
             }
             case 'payment_intent.payment_failed': {

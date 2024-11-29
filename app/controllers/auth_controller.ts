@@ -1,6 +1,7 @@
 import User from '#models/user'
 import { CreateUserValidator, LoginUserValidator } from '#validators/user'
 import type { HttpContext } from '@adonisjs/core/http'
+import { assert } from '../assert.js'
 
 export default class AuthController {
     public async login({ request, response }: HttpContext) {
@@ -46,5 +47,12 @@ export default class AuthController {
                 }
             }
         }
+    }
+
+    public async me({ auth, response }: HttpContext) {
+        assert(auth.user, 'Unauthorized')
+        const user = await User.query().where('id', auth.user.id).first()
+
+        return response.ok(user)
     }
 }

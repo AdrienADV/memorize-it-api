@@ -1,14 +1,14 @@
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
 
-import FakesController from '#controllers/fakes_controller'
-import AuthController from '#controllers/auth_controller'
-import DecksController from '#controllers/decks_controller'
-import CardsController from '#controllers/cards_controller'
-import CategoriesController from '#controllers/categories_controller'
-import ExplorersController from '#controllers/explorers_controller'
-import GamesController from '#controllers/games_controller'
-import CheckoutsController from '#controllers/checkouts_controller'
+const FakesController = () => import('#controllers/fakes_controller')
+const AuthController = () => import('#controllers/auth_controller')
+const DecksController = () => import('#controllers/decks_controller')
+const CardsController = () => import('#controllers/cards_controller')
+const CategoriesController = () => import('#controllers/categories_controller')
+const ExplorersController = () => import('#controllers/explorers_controller')
+const GamesController = () => import('#controllers/games_controller')
+const CheckoutsController = () => import('#controllers/checkouts_controller')
 
 router.get('/', async () => {
   return {
@@ -47,6 +47,7 @@ router.group(() => {
 
 
   router.post('/auth/logout', [AuthController, 'logout'])
+  router.get('/auth/me', [AuthController, 'me'])
 
   router.get('/stripe-key', [CheckoutsController, 'stripeKey'])
 }).use(middleware.auth())
