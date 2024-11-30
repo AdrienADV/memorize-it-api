@@ -1,10 +1,13 @@
 import Deck from '#models/deck';
 import { getDeckPublicDeckValidator } from '#validators/deck';
 import type { HttpContext } from '@adonisjs/core/http'
+import { assert } from '../assert.js';
+import User from '#models/user';
 
 export default class ExplorersController {
 
-    async all({ params, response }: HttpContext) {
+    async all({ auth, params, response }: HttpContext) {
+        assert(auth.user, 'Kindly Login');
         const { categoryId } = params;
         const query = Deck.query()
             .where('isPublic', true)
@@ -15,11 +18,18 @@ export default class ExplorersController {
         }
         const decks = await query;
 
+        const user = await User.query().where('id', auth.user.id).preload('decks').first();
+        console.log(user?.decks);
+
+
+        const isAlreadyBuy = user?.decks.find(deck => deck.id === deck.id);
+
         const decksWithOwner = decks.map(deck => ({
             id: deck.id,
             name: deck.title,
             cardCount: deck.cards.length,
             categoryId: deck.categoryId,
+            isAlreadyBuy,
             price: deck.priceId,
             iconCategoryName: deck.category.iconName,
             iconCategoryFamily: deck.category.iconLibrary,
@@ -28,13 +38,18 @@ export default class ExplorersController {
         return response.ok(decksWithOwner);
     }
 
-    async decksDetails({ params, response }: HttpContext) {
+    async decksDetails({ auth, params, response }: HttpContext) {
+        assert(auth.user, 'Unauthorized');
         const { id } = await getDeckPublicDeckValidator.validate(params);
         const deck = await Deck.query()
             .where('id', id)
             .preload('category')
             .preload('cards')
             .first()
+
+        const user = await User.query().where('id', auth.user.id).preload('decks').first();
+
+        const isAlreadyBuy = user?.decks.find(deck => deck.id === deck.id);
 
         if (!deck) {
             return response.notFound({
@@ -46,6 +61,7 @@ export default class ExplorersController {
             id: deck.id,
             name: deck.title,
             cardCount: deck.cards.length,
+            isAlreadyBuy,
             category: deck.category,
             description: deck.description,
             price: deck.priceId,
