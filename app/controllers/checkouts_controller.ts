@@ -56,9 +56,6 @@ export default class CheckoutsController {
         const RequestRaw = request.raw()
         const signature = request.header('stripe-signature')
 
-        console.log('RequestRaw :', RequestRaw);
-        console.log('signature :', signature);
-
         assert(signature, 'Stripe signature is required');
         assert(RequestRaw, 'Request body is required');
 
