@@ -20,18 +20,19 @@ export default class ExplorersController {
 
         const user = await User.query().where('id', auth.user.id).preload('decks').first();
 
-        const isAlreadyBuy = user?.decks.map(deck => deck.id) ? true : false;
-
-        const decksWithOwner = decks.map(deck => ({
-            id: deck.id,
-            name: deck.title,
-            cardCount: deck.cards.length,
-            categoryId: deck.categoryId,
-            isAlreadyBuy,
-            price: deck.priceId,
-            iconCategoryName: deck.category.iconName,
-            iconCategoryFamily: deck.category.iconLibrary,
-        }));
+        const decksWithOwner = decks.map(deck => {
+            const isAlreadyBuy = user?.decks.some(userDeck => userDeck.id === deck.id) || false;
+            return {
+                id: deck.id,
+                name: deck.title,
+                cardCount: deck.cards.length,
+                categoryId: deck.categoryId,
+                isAlreadyBuy,
+                price: deck.priceId,
+                iconCategoryName: deck.category.iconName,
+                iconCategoryFamily: deck.category.iconLibrary,
+            };
+        });
 
         return response.ok(decksWithOwner);
     }
@@ -53,12 +54,13 @@ export default class ExplorersController {
             });
         }
 
-        const isAlreadyBuy = user?.decks.map(deck => deck.id) ? true : false;
+        const isAlreadyBuy = user?.decks.some(userDeck => userDeck.id === deck.id) || false;
+
         return response.ok({
             id: deck.id,
             name: deck.title,
             cardCount: deck.cards.length,
-            isAlreadyBuy: isAlreadyBuy,
+            isAlreadyBuy,
             category: deck.category,
             description: deck.description,
             price: deck.priceId,
