@@ -21,15 +21,12 @@ export default class ExplorersController {
         const user = await User.query().where('id', auth.user.id).preload('decks').first();
         console.log(user?.decks);
 
-
-        const isAlreadyBuy = user?.decks.find(deck => deck.id === deck.id);
-
         const decksWithOwner = decks.map(deck => ({
             id: deck.id,
             name: deck.title,
             cardCount: deck.cards.length,
             categoryId: deck.categoryId,
-            isAlreadyBuy,
+            isAlreadyBuy: !!user?.decks.find(userDeck => userDeck.id === deck.id),
             price: deck.priceId,
             iconCategoryName: deck.category.iconName,
             iconCategoryFamily: deck.category.iconLibrary,
@@ -49,8 +46,6 @@ export default class ExplorersController {
 
         const user = await User.query().where('id', auth.user.id).preload('decks').first();
 
-        const isAlreadyBuy = user?.decks.find(deck => deck.id === deck.id);
-
         if (!deck) {
             return response.notFound({
                 message: 'Deck not found',
@@ -61,7 +56,7 @@ export default class ExplorersController {
             id: deck.id,
             name: deck.title,
             cardCount: deck.cards.length,
-            isAlreadyBuy,
+            isAlreadyBuy: !!user?.decks.find(deck => deck.id === deck.id),
             category: deck.category,
             description: deck.description,
             price: deck.priceId,
