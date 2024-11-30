@@ -17,7 +17,7 @@ export default class AuthController {
         const { email, password, fullName } = await CreateUserValidator.validate(payload)
         const isUserAlreadyExist = await User.findBy('email', email)
         if (isUserAlreadyExist) {
-            return response.badRequest({ error: "L'utilisateur existe déjà" })
+            return response.badRequest({ error: "Cette utilisateur existe déjà, veuillez vous connecter" })
         }
 
         const createUser = await User.create({

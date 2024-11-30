@@ -35,9 +35,4 @@ export default class DecksController {
         }))
         return response.ok(decks)
     }
-
-    async addDeckToUser({ auth, request, response }: HttpContext) {
-        assert(auth.user, 'Kindly login')
-        return response.created({ message: 'Deck added to user' })
-    }
 }

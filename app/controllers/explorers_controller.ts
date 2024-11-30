@@ -19,14 +19,15 @@ export default class ExplorersController {
         const decks = await query;
 
         const user = await User.query().where('id', auth.user.id).preload('decks').first();
-        console.log(user?.decks);
+
+        const isAlreadyBuy = user?.decks.map(deck => deck.id) ? true : false;
 
         const decksWithOwner = decks.map(deck => ({
             id: deck.id,
             name: deck.title,
             cardCount: deck.cards.length,
             categoryId: deck.categoryId,
-            isAlreadyBuy: !!user?.decks.find(userDeck => userDeck.id === deck.id),
+            isAlreadyBuy,
             price: deck.priceId,
             iconCategoryName: deck.category.iconName,
             iconCategoryFamily: deck.category.iconLibrary,
@@ -52,11 +53,12 @@ export default class ExplorersController {
             });
         }
 
+        const isAlreadyBuy = user?.decks.map(deck => deck.id) ? true : false;
         return response.ok({
             id: deck.id,
             name: deck.title,
             cardCount: deck.cards.length,
-            isAlreadyBuy: !!user?.decks.find(deck => deck.id === deck.id),
+            isAlreadyBuy: isAlreadyBuy,
             category: deck.category,
             description: deck.description,
             price: deck.priceId,
