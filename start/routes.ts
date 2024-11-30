@@ -32,6 +32,8 @@ router.group(() => {
   router.group(() => {
     router.post('/', [CardsController, 'create'])
     router.get('/:id', [CardsController, 'get'])
+    router.post('/modify', [CardsController, 'modify'])
+    router.delete('/delete', [CardsController, 'delete'])
   }).prefix('/cards')
 
   router.group(() => {
