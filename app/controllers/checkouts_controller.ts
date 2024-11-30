@@ -67,7 +67,7 @@ export default class CheckoutsController {
                 env.get('STRIPE_WEBHOOK_SECRET')
             );
         } catch (err) {
-            // console.log(err);
+            console.log(err, 'Webhook Error');
             return response.badRequest({ message: 'Webhook Error', error: err });
         }
         console.log(event.type);
