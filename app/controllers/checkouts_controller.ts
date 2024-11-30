@@ -70,7 +70,7 @@ export default class CheckoutsController {
             // console.log(err);
             return response.badRequest({ message: 'Webhook Error', error: err });
         }
-
+        console.log(event.type);
 
         switch (event.type) {
             case 'payment_intent.succeeded': {
