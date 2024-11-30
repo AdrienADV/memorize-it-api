@@ -78,7 +78,6 @@ export default class CheckoutsController {
                 const userId = paymentIntent.metadata.userId;
                 const deckId = paymentIntent.metadata.deckId;
 
-                console.log('Paiement réussi :', paymentIntent)
                 console.log('User ID :', userId)
                 console.log('Deck ID :', deckId)
 
